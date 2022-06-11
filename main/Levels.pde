@@ -3,7 +3,18 @@ public class Levels{
   
   }
   void makeLVL1(){
-  
+   PVector ballStart = new PVector(width/2+250, height/2);
+    rope1 = new Rope(new PVector(width/2+100, height/2-200), ballStart);
+    rope2 = new Rope(new PVector(width/2+250, height/2-200), ballStart);
+    lonzo = new Ball(ballStart);
+    for (int i = 0; i < 2; i++) {
+      Inters.add(new PVector(0, 0));
+    }
+    Ropes.add(rope1);
+    Ropes.add(rope2);
+    chosen = new Rope(new PVector(0, 0), new PVector(0, 0));
+    len = 9999;
+    scoreLoc =new PVector (width/2, height/2+300);
   }
   void makeLVL2(){
     PVector ballStart = new PVector(width/2-250, height/2);

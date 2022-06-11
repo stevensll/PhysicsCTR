@@ -22,7 +22,7 @@ float len;
 float veloX, veloY;
 
 PVector scoreLoc;
-Ball lonzo;
+Ball lonzo = new Ball(new PVector(0,0));
 Rope rope1;
 Rope rope2;
 Rope rope3;
@@ -53,14 +53,17 @@ void draw() {
       ui.levelsButton();
       break;  
     case L1:
+     background(ui.lvl1bg);
      game();
      ui.gameButtons();
      break;
    case L2:
+     background(ui.lvl2bg);
      game();
      ui.gameButtons();
      break;
    case L3:
+     background(ui.lvl3bg);
      game();
      ui.gameButtons();
      break;
@@ -79,20 +82,20 @@ void reset(){
   Ropes.clear();
   Inters.clear();
   empty = true;
+  lonzo.stop();
 }
 
 void game() {
-  background(112, 50, 126);
   strokeWeight(5);
   stroke(255);
-  rope1.display();
-  rope2.display();
-  rope3.display();
+  for(Rope rope: Ropes){
+    rope.display();
+  }
   lonzo.display();
   
   //BUTTONS
   rectMode(CENTER);
-  rect(scoreLoc.x, scoreLoc.y, 100, 100);
+  rect(scoreLoc.x, scoreLoc.y, 100, 100);  
   line(scoreLoc.x+50, scoreLoc.y+50, scoreLoc.x-50,scoreLoc.y-50);
   if (lonzo.getPos().x<scoreLoc.x+50 && lonzo.getPos().x>scoreLoc.x-50 && lonzo.getPos().y+lonzo.radius < scoreLoc.y+50 && lonzo.getPos().y > scoreLoc.y-50) {
     ui.endScreen(true);
@@ -129,8 +132,6 @@ void game() {
         }
       }
     }
-
-
     len =999;
     if (chosen !=null &&!empty) {
       chosen.setCol(250);
