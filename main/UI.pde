@@ -1,36 +1,78 @@
 public class UI{
+  Levels lvls;
   public UI(){
-  
+    lvls = new Levels();
   }
+    void gameButtons(){
+    rectMode(CENTER);
+    stroke(0);
+    fill(192,40,10);
+    rect(width/2-125,height/2-400,150,75,10);
+    rect(width/2+125,height/2-400,150,75,10);
+    PFont font = createFont("bunga.otf", 120);
+    fill(0);
+    textFont(font);
+    textAlign(CENTER);
+    textSize(75);
+    text("LEVELS", width/2-125, height/2-385);
+    text("Retry", width/2+125, height/2-385);
+    textSize(200);
+    if (mousePressed) {
+        //GO TO LEVELS MENU
+        if (mouseX < width/2-50 && mouseX > width/2-200 && mouseY<height/2-400+75/2 && mouseY > height/2-400-75/2) {
+          gState = State.LVLS;
+          reset();
+        }
+        //RESTART THE LEVEL
+       if (mouseX < width/2+50 && mouseX > width/2+200 && mouseY<height/2-400+75/2 && mouseY > height/2-400-75/2) {
+         reset();
+         switch(gState){
+            case L1:
+              lvls.makeLVL1();
+              break;
+            case L2:
+              lvls.makeLVL2();
+              break;
+            case L3:
+              lvls.makeLVL3();
+              break;
+          }
+        }
+      }
+    }
   void endScreen(boolean win){
-  rectMode(CENTER);
-  stroke(0);
-  fill(192,40,10);
-  rect(width/2,height/2,400,150,10);
-  rect(width/2-125,height/2+150,150,75,10);
-  rect(width/2+125,height/2+150,150,75,10);
-  PFont font = createFont("bunga.otf", 120);
-  fill(0);
-  textFont(font);
-  textAlign(CENTER);
-  textSize(75);
-  text("Return", width/2-125, height/2+175);
-  text("Retry", width/2+125, height/2+175);
-  textSize(200);
-  if(win){
-    text("VICTORY!", width/2, height/2+50);
-    noLoop();
-  }
-  else {
-      text("DEFEAT!", width/2, height/2+50);
-  }
-  if (mousePressed) {
-    if (mouseX < width/2-50 && mouseX > width/2-200 && mouseY<height/2+150+75/2 && mouseY > height/2 +150-75/2) {
-      gState = State.LVLS;
+    rectMode(CENTER);
+    stroke(0);
+    fill(192,40,10);
+    rect(width/2,height/2,400,150,10);
+    rect(width/2-125,height/2+150,150,75,10);
+    rect(width/2+125,height/2+150,150,75,10);
+    PFont font = createFont("bunga.otf", 120);
+    fill(0);
+    textFont(font);
+    textAlign(CENTER);
+    textSize(75);
+    text("Return", width/2-125, height/2+175);
+    text("Retry", width/2+125, height/2+175);
+    textSize(200);
+    if(win){
+      text("VICTORY!", width/2, height/2+50);
+      noLoop();
     }
-     if (mouseX < width/2+50 && mouseX > width/2+200 && mouseY<height/2+150+75/2 && mouseY > height/2 +150-75/2) {
-   
+    else {
+        text("DEFEAT!", width/2, height/2+50);
     }
+    if (mousePressed) {
+        //LEVELS MENU
+        if (mouseX < width/2-50 && mouseX > width/2-200 && mouseY<height/2+150+75/2 && mouseY > height/2 +150-75/2) {
+          gState = State.LVLS;
+          reset();
+        }
+        //RESTART
+       if (mouseX < width/2+50 && mouseX > width/2+200 && mouseY<height/2+150+75/2 && mouseY > height/2 +150-75/2) {
+         reset();
+       }
+      }
   }
   void mainMenu() {
     PFont font = createFont("bunga.otf", 120);
@@ -72,7 +114,7 @@ public class UI{
     rect(width/3-75, height/3-75, 150, 150, 10);
     rect(width/2, height/2, 150, 150, 10);
     rect(2*width/3+75, 2*height/3+75, 150, 150, 10);
-    rect(width/2-200, height/2+300, 200,50,10);
+    rect(width/2-200, height/2+400, 200,50,10);
     PFont font = createFont("bunga.otf", 120);
     fill(0);
     textFont(font);
@@ -84,24 +126,25 @@ public class UI{
     text("2", width/2, height/2+50);
     text("3", 2*width/3+75, 2*height/3+125);
     textSize(50);
-    text("Return", width/2-200, height/2+315);
+    text("Return", width/2-200, height/2+415);
   }
   void levelsButton() {
       if (mousePressed) {
         //LEVEL 1
-        if (mouseX < width/2+75 && mouseX > width/2-75 && mouseY<height/2+75 && mouseY > height/2-75) {
-          gState = State.L1;
+        if (mouseX < width/3 && mouseX > width/3-150 && mouseY<height/3 && mouseY > height/3-150) {
+            gState = State.L1;
         }
         //LEVEL 2
-        if (mouseX < width/3 && mouseX > width/3-150 && mouseY<height/3 && mouseY > height/3-150) {
-            gState = State.L2;
+        if (mouseX < width/2+75 && mouseX > width/2-75 && mouseY<height/2+75 && mouseY > height/2-75) {
+          gState = State.L2;
+           lvls.makeLVL2();
         }
         //LEVEL3
         if (mouseX < 2*width/3+150&& mouseX > 2*width/3 && mouseY<2*height/3+150 && mouseY > 2*height/3) {
             gState = State.L3;
         }
         //RETURN
-        if (mouseX < width/2-100&& mouseX > width/2-300 && mouseY<height/2+325 && mouseY > height/2+275) {
+        if (mouseX < width/2-100&& mouseX > width/2-300 && mouseY<height/2+425 && mouseY > height/2+375) {
           gState = State.MAIN;
         }
       }

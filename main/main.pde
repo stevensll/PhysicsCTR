@@ -1,14 +1,6 @@
-float angle;
-float angleV=0;
-float angleA=0;
-float force;
-float len;
-float gravity = .9;
-float gravityT = 0.4;
-float veloX = 0;
-float veloY = 0;
-PVector ball;
-PVector Box;
+//GAME ENGINE
+Physics phys;
+UI ui;
 enum State{
   MAIN,
   LVLS,
@@ -17,44 +9,37 @@ enum State{
   L3,
 }
 State gState;
-//PVector inter = new PVector(0, 0);
+//
 
+//CONSTANTS
+float gravity = .9;
+float gravityT = 0.4;
+//
+
+float angle, angleV, angleA;
+float force;
+float len;
+float veloX, veloY;
+
+PVector scoreLoc;
 Ball lonzo;
 Rope rope1;
 Rope rope2;
 Rope rope3;
 Rope chosen;
-UI ui;
+
 ArrayList<PVector> Inters = new ArrayList<PVector>();
+ArrayList<Rope> Ropes = new ArrayList<Rope>();
 boolean empty = true;
 
-ArrayList<Rope> Ropes = new ArrayList<Rope>();
-//Ropes.add(rope1);
-//Ropes.add(rope2);
-//Ropes.add(rope3);
-
 void setup() {
-  ui = new UI();
   frameRate(60);
   size(720, 900);
+  ui = new UI();
+  phys = new Physics();
   gState = State.MAIN;
-  PVector ballStart = new PVector(width/2-250, height/2);
-  rope1 = new Rope(new PVector(width/2-300, height/2-200), ballStart);
-  rope2 = new Rope(new PVector(width/2 + 300, height/2-200), ballStart);
-  rope3 = new Rope(new PVector(width/2, height/2-200), ballStart);
-  lonzo = new Ball(ballStart);
-  for (int i = 0; i < 3; i++) {
-    Inters.add(new PVector(0, 0));
-  }
-  Ropes.add(rope1);
-  Ropes.add(rope2);
-  Ropes.add(rope3);
-  chosen = new Rope(new PVector(0, 0), new PVector(0, 0));
-  len = 9999;
-  Box =new PVector (width/2+200, height/2+300);
+  reset();
 }
-
-
 
 void draw() {
   print(gState);
@@ -69,19 +54,31 @@ void draw() {
       break;  
     case L1:
      game();
+     ui.gameButtons();
      break;
    case L2:
      game();
+     ui.gameButtons();
      break;
    case L3:
      game();
+     ui.gameButtons();
      break;
   }
 }
 
 void reset(){
-
-
+  angle = 0;
+  angleV = 0;
+  angleA =0;
+  force = 0;
+  len = 0;
+  veloX = 0;
+  veloY = 0;
+  chosen = null;
+  Ropes.clear();
+  Inters.clear();
+  empty = true;
 }
 
 void game() {
@@ -92,20 +89,24 @@ void game() {
   rope2.display();
   rope3.display();
   lonzo.display();
+  
+  //BUTTONS
   rectMode(CENTER);
-  rect(Box.x, Box.y, 100, 100);
-  line(Box.x+50, Box.y+50, Box.x-50,Box.y-50);
-  if (lonzo.getPos().x<Box.x+50 && lonzo.getPos().x>Box.x-50 && lonzo.getPos().y+lonzo.radius < Box.y+50 && lonzo.getPos().y > Box.y-50) {
-    endScreen(true);
+  rect(scoreLoc.x, scoreLoc.y, 100, 100);
+  line(scoreLoc.x+50, scoreLoc.y+50, scoreLoc.x-50,scoreLoc.y-50);
+  if (lonzo.getPos().x<scoreLoc.x+50 && lonzo.getPos().x>scoreLoc.x-50 && lonzo.getPos().y+lonzo.radius < scoreLoc.y+50 && lonzo.getPos().y > scoreLoc.y-50) {
+    ui.endScreen(true);
     //noLoop();
   } else if(lonzo.getPos().x-lonzo.radius > width || lonzo.getPos().x+lonzo.radius < 0 || lonzo.getPos().y-lonzo.radius > height || lonzo.getPos().y+lonzo.radius < 0){
-    endScreen(false);
+    ui.endScreen(false);
     //noLoop();
   }
+  //
+  
   if (mousePressed) {
     line(mouseX, mouseY, pmouseX, pmouseY);
-    for (int i = 0; i < 3; i ++) {
-      Inters.set(i, lineCollision(mouseX, mouseY, pmouseX, pmouseY, Ropes.get(i).getStartPos().x, Ropes.get(i).getStartPos().y, Ropes.get(i).getEndPos().x, Ropes.get(i).getEndPos().y));
+    for (int i = 0; i < Ropes.size(); i ++) {
+      Inters.set(i, phys.lineCollision(mouseX, mouseY, pmouseX, pmouseY, Ropes.get(i).getStartPos().x, Ropes.get(i).getStartPos().y, Ropes.get(i).getEndPos().x, Ropes.get(i).getEndPos().y));
     }
   }
   stroke(130);
@@ -152,17 +153,4 @@ void game() {
     }
     empty = true;
   }
-}
-
-PVector lineCollision(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
-  float uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1));
-  float uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1));
-  if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
-    float intersectionX = x1 + (uA * (x2-x1));
-    float intersectionY = y1 + (uA * (y2-y1));
-    return new PVector(intersectionX, intersectionY);
-  }
-  return new PVector(0, 0);
-}
-
 }
