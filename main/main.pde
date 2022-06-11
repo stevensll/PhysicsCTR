@@ -9,6 +9,14 @@ float veloX = 0;
 float veloY = 0;
 PVector ball;
 PVector Box;
+enum State{
+  MAIN,
+  LVLS,
+  L1,
+  L2,
+  L3,
+}
+State gState;
 //PVector inter = new PVector(0, 0);
 
 Ball lonzo;
@@ -16,7 +24,7 @@ Rope rope1;
 Rope rope2;
 Rope rope3;
 Rope chosen;
-
+UI ui;
 ArrayList<PVector> Inters = new ArrayList<PVector>();
 boolean empty = true;
 
@@ -26,8 +34,10 @@ ArrayList<Rope> Ropes = new ArrayList<Rope>();
 //Ropes.add(rope3);
 
 void setup() {
+  ui = new UI();
   frameRate(60);
   size(720, 900);
+  gState = State.MAIN;
   PVector ballStart = new PVector(width/2-250, height/2);
   rope1 = new Rope(new PVector(width/2-300, height/2-200), ballStart);
   rope2 = new Rope(new PVector(width/2 + 300, height/2-200), ballStart);
@@ -41,10 +51,40 @@ void setup() {
   Ropes.add(rope3);
   chosen = new Rope(new PVector(0, 0), new PVector(0, 0));
   len = 9999;
-  Box =new PVector (width/2+100, height/2+200);
+  Box =new PVector (width/2+200, height/2+300);
 }
 
+
+
 void draw() {
+  print(gState);
+  switch(gState){
+    case MAIN:
+      ui.mainMenu();
+      ui.mainButton();
+      break;
+    case LVLS:
+      ui.levelsMenu();
+      ui.levelsButton();
+      break;  
+    case L1:
+     game();
+     break;
+   case L2:
+     game();
+     break;
+   case L3:
+     game();
+     break;
+  }
+}
+
+void reset(){
+
+
+}
+
+void game() {
   background(112, 50, 126);
   strokeWeight(5);
   stroke(255);
@@ -52,10 +92,15 @@ void draw() {
   rope2.display();
   rope3.display();
   lonzo.display();
-  rect(Box.x, Box.y,100, 100);
-  if(lonzo.getPos().x+30<Box.x+100 && lonzo.getPos().x-30>Box.x&& lonzo.getPos().y+30 < Box.y+100 && lonzo.getPos().y-30 > Box.y){
-    print("win");
-    noLoop();
+  rectMode(CENTER);
+  rect(Box.x, Box.y, 100, 100);
+  line(Box.x+50, Box.y+50, Box.x-50,Box.y-50);
+  if (lonzo.getPos().x<Box.x+50 && lonzo.getPos().x>Box.x-50 && lonzo.getPos().y+lonzo.radius < Box.y+50 && lonzo.getPos().y > Box.y-50) {
+    endScreen(true);
+    //noLoop();
+  } else if(lonzo.getPos().x-lonzo.radius > width || lonzo.getPos().x+lonzo.radius < 0 || lonzo.getPos().y-lonzo.radius > height || lonzo.getPos().y+lonzo.radius < 0){
+    endScreen(false);
+    //noLoop();
   }
   if (mousePressed) {
     line(mouseX, mouseY, pmouseX, pmouseY);
@@ -118,4 +163,6 @@ PVector lineCollision(float x1, float y1, float x2, float y2, float x3, float y3
     return new PVector(intersectionX, intersectionY);
   }
   return new PVector(0, 0);
+}
+
 }
