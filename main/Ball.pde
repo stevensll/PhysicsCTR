@@ -1,22 +1,35 @@
 public class Ball{
-  private float radius = 50;
+  private float radius = 30;
   private PVector pos;
+  private boolean idle;
   
-  public Ball (float xcor, float ycor, float angle){
-    this.pos.x = xcor;
-    this.pos.y = ycor;
-    this.pos.z = angle;
+  public Ball (PVector s){
+    this.pos = s;
+    this.idle = true;
   }
   void display(){
+    fill(255);
     circle(pos.x,pos.y, radius);
+  }
+  boolean isIdle(){
+    return this.idle;
+  }
+  void move(){
+    this.idle = false;
+  }
+  void stop(){
+    this.idle = true;
   }
   void setPos(float x, float y){
     this.pos.x = x;
     this.pos.y = y;
   }
+  void updatePos(float x, float y){
+    this.pos.x+=x;
+    this.pos.y+=y;
+  }
   PVector getPos(){
     return this.pos;
   }
-
 
 }
