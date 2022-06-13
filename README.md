@@ -1,6 +1,9 @@
 # PhysicsCTR
 Physics C Final Project 
 
+[**VIDEO**](https://streamable.com/ikricb)
+
+
 Cut the Rope Remix
 
 Steven Lei and Jeremy Wong pd. 5
