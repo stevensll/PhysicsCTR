@@ -8,7 +8,8 @@ public class Ball{
     this.idle = true;
   }
   void display(){
-    fill(255);
+    stroke(0,153,0);
+    fill(0,153,0);
     circle(pos.x,pos.y, radius);
   }
   boolean isIdle(){

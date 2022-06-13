@@ -21,6 +21,8 @@ public class Levels{
     rope1 = new Rope(new PVector(width/2-300, height/2-200), ballStart);
     rope2 = new Rope(new PVector(width/2 + 300, height/2-200), ballStart);
     rope3 = new Rope(new PVector(width/2, height/2-200), ballStart);
+    rope2.addSlack(20);
+    rope3.addSlack(10);
     lonzo = new Ball(ballStart);
     for (int i = 0; i < 3; i++) {
       Inters.add(new PVector(0, 0));
@@ -35,7 +37,6 @@ public class Levels{
   void makeLVL3(){
     PVector ballStart = new PVector(width/2-200, height/2-100);
     rope1 = new Rope(new PVector(width/2-250, height/2-200), ballStart);
-    print(rope1.getAngle());
     rope2 = new Rope(new PVector(width/2+50, height/2-200), ballStart);
     rope3 = new Rope(new PVector(width/2-250, height/2+0), ballStart);
     rope4 = new Rope(new PVector(width/2+50, height/2+0), ballStart);
@@ -51,6 +52,10 @@ public class Levels{
     Ropes.add(rope3);
     Ropes.add(rope4);
     Ropes.add(rope5);
+    rope3.addSlack(20);
+    rope4.addSlack(30);
+    rope5.addSlack(20);
+
     chosen = new Rope(new PVector(0, 0), new PVector(0, 0));
     len = 9999;
     scoreLoc =new PVector (width/2+200, height/2+300);

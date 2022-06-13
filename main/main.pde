@@ -14,7 +14,7 @@ State gState;
 
 //CONSTANTS
 float gravity = .9;
-float gravityT = 0.4;
+float gravityT = 0.9;
 //
 
 float angle, angleV, angleA;
@@ -30,6 +30,7 @@ Rope rope3;
 Rope rope4;
 Rope rope5;
 Rope chosen;
+Rope formerChosen;
 
 ArrayList<PVector> Inters = new ArrayList<PVector>();
 ArrayList<Rope> Ropes = new ArrayList<Rope>();
@@ -47,7 +48,7 @@ void setup() {
   reset();
 
   jerm = loadImage("icons/jeremys.png");
-  music = new SoundFile(this, "music.wav");
+  //music = new SoundFile(this, "music.wav");
   //music.play();
   //music.loop();
   //music.amp(.2);
@@ -98,6 +99,7 @@ void reset() {
 }
 
 void game() {
+  print(lonzo.isIdle());
   strokeWeight(5);
   stroke(255);
   for (Rope rope : Ropes) {
@@ -119,20 +121,23 @@ void game() {
   //
 
   if (mousePressed) {
+    stroke(0);
+    fill(0);
     line(mouseX, mouseY, pmouseX, pmouseY);
     for (int i = 0; i < Ropes.size(); i ++) {
       Inters.set(i, phys.lineCollision(mouseX, mouseY, pmouseX, pmouseY, Ropes.get(i).getStartPos().x, Ropes.get(i).getStartPos().y, Ropes.get(i).getEndPos().x, Ropes.get(i).getEndPos().y));
     }
-  }
-  stroke(130);
-  for (int i = 0; i <Ropes.size(); i++) {
-    if (Inters.get(i).x!=0.0 && Inters.get(i).y!=0.0) {
-      circle(Inters.get(i).x, Inters.get(i).y, 10);
-      Ropes.get(i).disable();
-      Ropes.get(i).setEndPos(Inters.get(i));
-      lonzo.move();
+      stroke(130);
+    for (int i = 0; i <Ropes.size(); i++) {
+      if (Inters.get(i).x!=0.0 && Inters.get(i).y!=0.0) {
+        circle(Inters.get(i).x, Inters.get(i).y, 10);
+        Ropes.get(i).disable();
+        Ropes.get(i).setEndPos(Inters.get(i));
+        lonzo.move();
+      }
     }
   }
+
   if (!lonzo.isIdle()) {
     for (Rope rope : Ropes) {
       if (!rope.getDisabled()) {
@@ -140,17 +145,19 @@ void game() {
         rope.setEndPos(lonzo.getPos());
         if (rope.getLen() < len) {
           len = rope.getLen();
+          //formerChosen = chosen;
           chosen = rope;
         }
       }
     }
+
     len =999;
     if (chosen !=null &&!empty) {
-      print(degrees(angle)+"\n");
+      //print(degrees(angle)+"\n");
       chosen.setCol(250);
       angle = chosen.getAngle();
-      force = gravity * sin(angle);
-      angleA = -1*force/chosen.getLength();
+      force = -1*gravity * sin(angle);
+      angleA = force/chosen.getLen();
       angleV+=angleA;
       angle+=angleV;
       angleV*=0.99;
@@ -160,11 +167,19 @@ void game() {
       lonzo.setPos(newX, newY);
     }
     if (empty) {
-      print(angleV + "\n");
+      //print(angleV + "\n");
       veloX=sqrt(2*gravity)*sin(angle);
       veloY+=gravityT;
       lonzo.updatePos(veloX, veloY);
     }
     empty = true;
   }
+   for(Rope rope: Ropes){
+      if(!rope.getDisabled()){
+          if(dist(rope.getStartPos().x, rope.getStartPos().y, rope.getEndPos().x, rope.getEndPos().y) > rope.getLen()+10 && chosen!=rope){
+          rope.setCol(color(204,0,0));
+          lonzo.stop();
+        }
+      }
+     }
 }
