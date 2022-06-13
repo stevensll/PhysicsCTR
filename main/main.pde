@@ -2,8 +2,7 @@ import processing.sound.*;
 //GAME ENGINE
 Physics phys;
 UI ui;
-enum State {
-  MAIN,
+enum State {  MAIN,
     LVLS,
     L1,
     L2,
@@ -13,8 +12,8 @@ State gState;
 //
 
 //CONSTANTS
-float gravity = .9;
-float gravityT = 0.9;
+float gravity = 0.7;
+float gravityT = 0.4;
 //
 
 float angle, angleV, angleA;
@@ -99,7 +98,7 @@ void reset() {
 }
 
 void game() {
-  print(lonzo.isIdle());
+  //print(lonzo.isIdle());
   strokeWeight(5);
   stroke(255);
   for (Rope rope : Ropes) {
@@ -127,7 +126,7 @@ void game() {
     for (int i = 0; i < Ropes.size(); i ++) {
       Inters.set(i, phys.lineCollision(mouseX, mouseY, pmouseX, pmouseY, Ropes.get(i).getStartPos().x, Ropes.get(i).getStartPos().y, Ropes.get(i).getEndPos().x, Ropes.get(i).getEndPos().y));
     }
-      stroke(130);
+    stroke(130);
     for (int i = 0; i <Ropes.size(); i++) {
       if (Inters.get(i).x!=0.0 && Inters.get(i).y!=0.0) {
         circle(Inters.get(i).x, Inters.get(i).y, 10);
@@ -156,8 +155,8 @@ void game() {
       //print(degrees(angle)+"\n");
       chosen.setCol(250);
       angle = chosen.getAngle();
-      force = -1*gravity * sin(angle);
-      angleA = force/chosen.getLen();
+      force = gravity * sin(angle);
+      angleA =-1* force/chosen.getLen();
       angleV+=angleA;
       angle+=angleV;
       angleV*=0.99;
@@ -177,8 +176,10 @@ void game() {
    for(Rope rope: Ropes){
       if(!rope.getDisabled()){
           if(dist(rope.getStartPos().x, rope.getStartPos().y, rope.getEndPos().x, rope.getEndPos().y) > rope.getLen()+10 && chosen!=rope){
-          rope.setCol(color(204,0,0));
+          //rope.setCol(color(204,0,0));
           lonzo.stop();
+          angleA=0;
+          angleV=0;
         }
       }
      }
