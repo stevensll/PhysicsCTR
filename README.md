@@ -32,7 +32,9 @@ You can replay the level or go back after a defeat/victory.
 ## Physics Used
 
 **Basic Kinematics**: Used to control the ball's falling motion and application of acceleration.
+
 **Simple Harmonic Motion**: Used to control the ball's movement in a pendulumn.
+
 _**String Tension**_: Although we do not visually display each rope's slack, we do incorporate it into the game engine. When the ball extends too far out of reach for a rope, it becomes taut and the entire system stops moving.
 
 
