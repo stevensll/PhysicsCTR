@@ -13,6 +13,11 @@ public class Rope{
     this.start = s;
     this.end = e;
     this.theta = atan((end.x-start.x)/(end.y-start.y));
+     if(end.x >=start.x && end.y < start.y){
+      this.theta+=PI;
+    } else if (end.x < start.x && end. y < start.y){
+      this. theta-=PI;
+    } 
     this.disabled = false;
   }
   
@@ -39,6 +44,11 @@ public class Rope{
     stroke(col);
     line(start.x, start.y, end.x, end.y);
     this.theta = atan((end.x-start.x)/(end.y-start.y));
+    if(end.x >=start.x && end.y < start.y){
+      this.theta+=PI;
+    } else if (end.x < start.x && end. y < start.y){
+      this. theta-=PI;
+    } 
   }
   void setCol(int col){
     this.col = col;

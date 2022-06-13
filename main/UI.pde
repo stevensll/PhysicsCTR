@@ -150,6 +150,7 @@ public class UI{
         if (mouseX < 2*width/3+150&& mouseX > 2*width/3 && mouseY<2*height/3+150 && mouseY > 2*height/3) {
             reset();
             gState = State.L3;
+            lvls.makeLVL3();
         }
         //RETURN
         if (mouseX < width/2-100&& mouseX > width/2-300 && mouseY<height/2+425 && mouseY > height/2+375) {

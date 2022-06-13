@@ -1,12 +1,13 @@
+import processing.sound.*;
 //GAME ENGINE
 Physics phys;
 UI ui;
-enum State{
+enum State {
   MAIN,
-  LVLS,
-  L1,
-  L2,
-  L3,
+    LVLS,
+    L1,
+    L2,
+    L3,
 }
 State gState;
 //
@@ -22,15 +23,20 @@ float len;
 float veloX, veloY;
 
 PVector scoreLoc;
-Ball lonzo = new Ball(new PVector(0,0));
+Ball lonzo = new Ball(new PVector(0, 0));
 Rope rope1;
 Rope rope2;
 Rope rope3;
+Rope rope4;
+Rope rope5;
 Rope chosen;
 
 ArrayList<PVector> Inters = new ArrayList<PVector>();
 ArrayList<Rope> Ropes = new ArrayList<Rope>();
 boolean empty = true;
+
+SoundFile music;
+PImage jerm;
 
 void setup() {
   frameRate(60);
@@ -39,38 +45,44 @@ void setup() {
   phys = new Physics();
   gState = State.MAIN;
   reset();
+
+  jerm = loadImage("icons/jeremys.png");
+  music = new SoundFile(this, "music.wav");
+  //music.play();
+  //music.loop();
+  //music.amp(.2);
 }
 
 void draw() {
-  print(gState);
-  switch(gState){
-    case MAIN:
-      ui.mainMenu();
-      ui.mainButton();
-      break;
-    case LVLS:
-      ui.levelsMenu();
-      ui.levelsButton();
-      break;  
-    case L1:
-     background(ui.lvl1bg);
-     game();
-     ui.gameButtons();
-     break;
-   case L2:
-     background(ui.lvl2bg);
-     game();
-     ui.gameButtons();
-     break;
-   case L3:
-     background(ui.lvl3bg);
-     game();
-     ui.gameButtons();
-     break;
+  //print(gState);
+  switch(gState) {
+  case MAIN:
+    ui.mainMenu();
+    ui.mainButton();
+    break;
+  case LVLS:
+    ui.levelsMenu();
+    ui.levelsButton();
+    break;
+  case L1:
+    background(ui.lvl1bg);
+    game();
+    ui.gameButtons();
+    break;
+  case L2:
+    background(ui.lvl2bg);
+    game();
+    ui.gameButtons();
+    break;
+  case L3:
+    background(ui.lvl3bg);
+    game();
+    ui.gameButtons();
+    break;
   }
 }
 
-void reset(){
+void reset() {
   angle = 0;
   angleV = 0;
   angleA =0;
@@ -88,24 +100,24 @@ void reset(){
 void game() {
   strokeWeight(5);
   stroke(255);
-  for(Rope rope: Ropes){
+  for (Rope rope : Ropes) {
     rope.display();
   }
   lonzo.display();
-  
+
   //BUTTONS
-  rectMode(CENTER);
-  rect(scoreLoc.x, scoreLoc.y, 100, 100);  
-  line(scoreLoc.x+50, scoreLoc.y+50, scoreLoc.x-50,scoreLoc.y-50);
+  imageMode(CENTER);
+  image(jerm, scoreLoc.x, scoreLoc.y, 100, 100);
+  //rectMode(CENTER);
+  //rect(scoreLoc.x, scoreLoc.y, 100, 100);
+  //line(scoreLoc.x+50, scoreLoc.y+50, scoreLoc.x-50,scoreLoc.y-50);
   if (lonzo.getPos().x<scoreLoc.x+50 && lonzo.getPos().x>scoreLoc.x-50 && lonzo.getPos().y+lonzo.radius < scoreLoc.y+50 && lonzo.getPos().y > scoreLoc.y-50) {
     ui.endScreen(true);
-    //noLoop();
-  } else if(lonzo.getPos().x-lonzo.radius > width || lonzo.getPos().x+lonzo.radius < 0 || lonzo.getPos().y-lonzo.radius > height || lonzo.getPos().y+lonzo.radius < 0){
+  } else if (lonzo.getPos().x-lonzo.radius > width || lonzo.getPos().x+lonzo.radius < 0 || lonzo.getPos().y-lonzo.radius > height || lonzo.getPos().y+lonzo.radius < 0) {
     ui.endScreen(false);
-    //noLoop();
   }
   //
-  
+
   if (mousePressed) {
     line(mouseX, mouseY, pmouseX, pmouseY);
     for (int i = 0; i < Ropes.size(); i ++) {
@@ -134,6 +146,7 @@ void game() {
     }
     len =999;
     if (chosen !=null &&!empty) {
+      print(degrees(angle)+"\n");
       chosen.setCol(250);
       angle = chosen.getAngle();
       force = gravity * sin(angle);
